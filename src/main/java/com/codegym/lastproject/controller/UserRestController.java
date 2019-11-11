@@ -5,16 +5,15 @@ import com.codegym.lastproject.model.User;
 import com.codegym.lastproject.service.RoleService;
 import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @Controller
 public class UserRestController {
     @Autowired
@@ -50,13 +49,14 @@ public class UserRestController {
 
     @PostMapping(value = "/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
+//        Iterable<User> originUser = userService.search(user.getEmail());
+//        if (!(originUser == null)) {
+//            return new ResponseEntity<>(HttpStatus.);
+//        }
         System.out.println("Creating User " + user.getName());
         userService.save(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/list").buildAndExpand(user.getId()).toUri());
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.CREATED);
-        return responseEntity;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

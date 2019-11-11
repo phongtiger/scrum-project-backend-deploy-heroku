@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Iterable<User> search(String keyword) {
+        return userRepository.findAllByName(keyword);
+    }
+
+    @Override
     public void save(User user) {
         userRepository.save(user);
     }
