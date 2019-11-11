@@ -56,7 +56,7 @@ public class UserRestController {
 //        }
         System.out.println("Creating User " + user.getName());
         userService.save(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,6 +92,6 @@ public class UserRestController {
         }
 
         userService.remove(target.getId());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

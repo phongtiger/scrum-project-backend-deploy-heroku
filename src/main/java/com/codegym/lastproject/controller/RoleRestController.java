@@ -42,7 +42,7 @@ public class RoleRestController {
     public ResponseEntity<Void> createRole(@RequestBody Role role) {
         System.out.println("Creating Role " + role.getName());
         roleService.save(role);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/role/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,6 +69,6 @@ public class RoleRestController {
         }
 
         roleService.remove(target.getId());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
