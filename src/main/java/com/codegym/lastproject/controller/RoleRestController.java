@@ -36,7 +36,7 @@ public class RoleRestController {
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Void> createRole(@RequestBody Role role) {
         System.out.println("Creating Role " + role.getName());
@@ -44,7 +44,7 @@ public class RoleRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/role/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Role> updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
         Role originRole = roleService.findById(id);
 
@@ -58,7 +58,7 @@ public class RoleRestController {
         return new ResponseEntity<>(originRole, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/role/delete/{id}")
     @ResponseBody
     public ResponseEntity<Void> apiDeleteRole(@PathVariable("id") Long id) {
         Role target = roleService.findById(id);
