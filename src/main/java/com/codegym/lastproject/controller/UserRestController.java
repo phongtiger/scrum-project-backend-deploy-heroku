@@ -27,7 +27,7 @@ public class UserRestController {
         return roleService.findAll();
     }
 
-    @GetMapping("/list")
+    @GetMapping("/user")
     public ResponseEntity<List<User>> listAllUsers() {
         List<User> users = (List<User>) userService.findAll();
         if (users.isEmpty()) {
@@ -35,19 +35,19 @@ public class UserRestController {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+//
+//    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+//        System.out.println("Fetching User with id: " + id);
+//        User user = userService.findById(id);
+//        if (user == null) {
+//            System.out.println("User with id " + id + " not found");
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
 
-    @GetMapping(value = "/list/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        System.out.println("Fetching User with id: " + id);
-        User user = userService.findById(id);
-        if (user == null) {
-            System.out.println("User with id " + id + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Void> createUser(@RequestBody User user) {
         List originUser = (List)userService.search(user.getEmail());
@@ -59,7 +59,20 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @DeleteMapping("/user/delete/{id}")
+//    @ResponseBody
+//    public ResponseEntity<Void> apiDeleteUser(@PathVariable("id") Long id) {
+//        User target = userService.findById(id);
+//
+//        if (target == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        userService.remove(target.getId());
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+    @PutMapping(value = "/user/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         User originUser = userService.findById(id);
 
@@ -67,31 +80,12 @@ public class UserRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        originUser.setEmail(user.getEmail());
-        originUser.setPassword(user.getPassword());
-
-        if (user.getRole() != null) {
-            Role originRole = roleService.findById(user.getRole().getId());
-            if (originRole == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            originUser.setRole(originRole);
-        }
+        originUser.setName(user.getName());
+        originUser.setPhone(user.getPhone());
+        originUser.setAddress(user.getAddress());
+        originUser.setAvatar(user.getAvatar());
 
         userService.save(originUser);
         return new ResponseEntity<>(originUser, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> apiDeleteUser(@PathVariable("id") Long id) {
-        User target = userService.findById(id);
-
-        if (target == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        userService.remove(target.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
