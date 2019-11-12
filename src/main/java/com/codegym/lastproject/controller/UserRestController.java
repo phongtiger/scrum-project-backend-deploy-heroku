@@ -88,4 +88,17 @@ public class UserRestController {
         userService.save(originUser);
         return new ResponseEntity<>(originUser, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/user/editPassword/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
+        User originUser = userService.findById(id);
+        if (originUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        originUser.setPassword(user.getPassword());
+
+        userService.save(originUser);
+        return new ResponseEntity<>(originUser, HttpStatus.OK);
+    }
 }
