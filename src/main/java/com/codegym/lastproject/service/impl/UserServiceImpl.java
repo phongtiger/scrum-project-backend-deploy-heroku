@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Iterable<User> search(String keyword) {
-        return userRepository.findAllByEmail(keyword);
+    public User search(String keyword) {
+        return userRepository.findByEmail(keyword);
     }
 
     @Override

@@ -4,5 +4,5 @@ import com.codegym.lastproject.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
-    Iterable<User> findAllByEmail(String name);
+    User findByEmail(String name);
 }

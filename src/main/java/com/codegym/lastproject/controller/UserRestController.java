@@ -35,23 +35,23 @@ public class UserRestController {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-//
-//    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-//        System.out.println("Fetching User with id: " + id);
-//        User user = userService.findById(id);
-//        if (user == null) {
-//            System.out.println("User with id " + id + " not found");
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
+
+    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        System.out.println("Fetching User with id: " + id);
+        User user = userService.findById(id);
+        if (user == null) {
+            System.out.println("User with id " + id + " not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/user/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Void> createUser(@RequestBody User user) {
-        List originUser = (List)userService.search(user.getEmail());
-        if (!(originUser.isEmpty())) {
+        User originUser = userService.search(user.getEmail());
+        if (originUser != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         System.out.println("Creating User " + user.getName());

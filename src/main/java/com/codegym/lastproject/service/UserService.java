@@ -7,7 +7,7 @@ public interface UserService {
 
     User findById(Long id);
 
-    Iterable<User> search(String keyword);
+    User search(String keyword);
 
     void save(User user);
 
