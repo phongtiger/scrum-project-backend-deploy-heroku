@@ -50,10 +50,10 @@ public class UserRestController {
     @PostMapping(value = "/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Void> createUser(@RequestBody User user) {
-//        Iterable<User> originUser = userService.search(user.getEmail());
-//        if (!(originUser == null)) {
-//            return new ResponseEntity<>(HttpStatus.);
-//        }
+        List originUser = (List)userService.search(user.getEmail());
+        if (!(originUser.isEmpty())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         System.out.println("Creating User " + user.getName());
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);

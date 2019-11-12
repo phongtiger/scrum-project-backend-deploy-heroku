@@ -26,49 +26,49 @@ public class RoleRestController {
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/role/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Role> getRole(@PathVariable("id") Long id) {
-        System.out.println("Fetching Role with id: " + id);
-        Role role = roleService.findById(id);
-        if (role == null) {
-            System.out.println("Role with id " + id + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(role, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Void> createRole(@RequestBody Role role) {
-        System.out.println("Creating Role " + role.getName());
-        roleService.save(role);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/role/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Role> updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
-        Role originRole = roleService.findById(id);
-
-        if (originRole == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        originRole.setName(role.getName());
-
-        roleService.save(originRole);
-        return new ResponseEntity<>(originRole, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/role/delete/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> apiDeleteRole(@PathVariable("id") Long id) {
-        Role target = roleService.findById(id);
-
-        if (target == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        roleService.remove(target.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @GetMapping(value = "/role/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Role> getRole(@PathVariable("id") Long id) {
+//        System.out.println("Fetching Role with id: " + id);
+//        Role role = roleService.findById(id);
+//        if (role == null) {
+//            System.out.println("Role with id " + id + " not found");
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(role, HttpStatus.OK);
+//    }
+//
+//    @PostMapping(value = "/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Void> createRole(@RequestBody Role role) {
+//        System.out.println("Creating Role " + role.getName());
+//        roleService.save(role);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @PutMapping(value = "/role/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Role> updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
+//        Role originRole = roleService.findById(id);
+//
+//        if (originRole == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        originRole.setName(role.getName());
+//
+//        roleService.save(originRole);
+//        return new ResponseEntity<>(originRole, HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/role/delete/{id}")
+//    @ResponseBody
+//    public ResponseEntity<Void> apiDeleteRole(@PathVariable("id") Long id) {
+//        Role target = roleService.findById(id);
+//
+//        if (target == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        roleService.remove(target.getId());
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
