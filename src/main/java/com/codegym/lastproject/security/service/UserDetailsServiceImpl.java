@@ -19,6 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with email: " + username);
         }
-        return null;
+        return UserPrinciple.build(user);
     }
 }
