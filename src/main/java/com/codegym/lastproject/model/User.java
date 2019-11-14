@@ -1,6 +1,10 @@
 package com.codegym.lastproject.model;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -9,6 +13,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NaturalId
     private String email;
     private String password;
 
@@ -18,14 +23,22 @@ public class User {
 
     private String avatar;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> role = new HashSet<>();
 
     public User() {
     }
 
-    public User(String email, String password, String name, String phone, String address, String avatar, Role role) {
+    public User(String email, String password, Set<Role> role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(String email, String password, String name, String phone, String address, String avatar, Set<Role> role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -91,11 +104,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Role getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 }
