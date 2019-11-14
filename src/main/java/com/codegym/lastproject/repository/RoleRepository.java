@@ -1,8 +1,11 @@
 package com.codegym.lastproject.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import com.codegym.lastproject.model.RoleName;
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.codegym.lastproject.model.Role;
+import org.springframework.stereotype.Repository;
 
-
-public interface RoleRepository extends CrudRepository<Role, Long> {
+@Repository
+public interface RoleRepository extends JpaRepository<Role, Long> {
+    Role findByName(RoleName roleName);
 }
