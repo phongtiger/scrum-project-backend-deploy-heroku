@@ -1,6 +1,5 @@
 package com.codegym.lastproject;
 
-import com.codegym.lastproject.formatter.RoleFormatter;
 import com.codegym.lastproject.service.RoleService;
 import com.codegym.lastproject.service.UserService;
 import com.codegym.lastproject.service.impl.RoleServiceImpl;
@@ -13,8 +12,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.format.Formatter;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -43,13 +40,6 @@ public class LastProjectApplication {
         @Override
         public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
             appContext = applicationContext;
-        }
-
-        @Override
-        public void addFormatters(FormatterRegistry registry) {
-            RoleService roleService = appContext.getBean(RoleService.class);
-            Formatter roleFormatter = new RoleFormatter(roleService);
-            registry.addFormatter(roleFormatter);
         }
     }
 
