@@ -2,14 +2,18 @@ package com.codegym.lastproject.service;
 
 import com.codegym.lastproject.model.User;
 
+import java.util.List;
+
 public interface UserService {
-    Iterable<User> findAll();
+    List<User> findAll();
+
+    User findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 
     User findById(Long id);
 
-    User search(String keyword);
+    void saveUser(User user);
 
-    void save(User user);
-
-    void remove(Long id);
+    void deleteUser(Long id);
 }

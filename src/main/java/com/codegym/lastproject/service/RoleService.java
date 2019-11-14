@@ -1,13 +1,12 @@
 package com.codegym.lastproject.service;
 
 import com.codegym.lastproject.model.Role;
+import com.codegym.lastproject.model.RoleName;
+
+import java.util.List;
 
 public interface RoleService {
-    Iterable<Role> findAll();
+    List<Role> findAll();
 
-    Role findById(Long id);
-
-    void save(Role role);
-
-    void remove(Long id);
+    Role findByName(RoleName roleName);
 }

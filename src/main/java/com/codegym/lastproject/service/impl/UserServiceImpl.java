@@ -5,35 +5,39 @@ import com.codegym.lastproject.repository.UserRepository;
 import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
     @Override
-    public Iterable<User> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
     public User findById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.get();
+        return userRepository.findById(id).get();
     }
 
     @Override
-    public User search(String keyword) {
-        return userRepository.findByEmail(keyword);
-    }
-
-    @Override
-    public void save(User user) {
+    public void saveUser(User user) {
         userRepository.save(user);
     }
 
     @Override
-    public void remove(Long id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 }
