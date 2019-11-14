@@ -19,7 +19,7 @@ public class RoleRestController {
 
     @GetMapping("/role")
     public ResponseEntity<List<Role>> listAllRoles() {
-        List<Role> roles = (List<Role>) roleService.findAll();
+        List<Role> roles = roleService.findAll();
         if (roles.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

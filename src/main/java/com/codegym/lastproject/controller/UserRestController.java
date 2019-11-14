@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,20 +24,21 @@ public class UserRestController {
     private RoleService roleService;
 
     @ModelAttribute("role")
-    public Iterable<Role> allRole() {
+    public List<Role> allRole() {
         return roleService.findAll();
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<List<User>> listAllUsers() {
-        List<User> users = userService.findAll();
-        if (users.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
+//    @GetMapping("/user")
+//    public ResponseEntity<List<User>> listAllUsers() {
+//        List<User> users = userService.findAll();
+//        if (users.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(users, HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         System.out.println("Fetching User with id: " + id);
         User user = userService.findById(id);
@@ -47,17 +49,17 @@ public class UserRestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/user/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
-        User originUser = userService.findByEmail(user.getEmail());
-        if (originUser != null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        System.out.println("Creating User " + user.getName());
-        userService.saveUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping(value = "/user/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Void> createUser(@RequestBody User user) {
+//        User originUser = userService.findByEmail(user.getEmail());
+//        if (originUser != null) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//        System.out.println("Creating User " + user.getName());
+//        userService.saveUser(user);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
 //    @DeleteMapping("/user/delete/{id}")
 //    @ResponseBody
@@ -72,7 +74,8 @@ public class UserRestController {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
-    @PutMapping(value = "/user/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/profile/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         User originUser = userService.findById(id);
 
@@ -89,7 +92,8 @@ public class UserRestController {
         return new ResponseEntity<>(originUser, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/user/editPassword/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/profile/editPassword/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
     public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
         User originUser = userService.findById(id);
         if (originUser == null) {
