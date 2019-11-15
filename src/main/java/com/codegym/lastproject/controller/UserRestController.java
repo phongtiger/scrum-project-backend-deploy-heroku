@@ -2,6 +2,7 @@ package com.codegym.lastproject.controller;
 
 import com.codegym.lastproject.model.Role;
 import com.codegym.lastproject.model.User;
+import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.RoleService;
 import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import java.util.List;
 @CrossOrigin("*")
 @Controller
 public class UserRestController {
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
     @Autowired
     private UserService userService;
 
@@ -41,17 +45,28 @@ public class UserRestController {
 //        return new ResponseEntity<>(users, HttpStatus.OK);
 //    }
 
-    @GetMapping(value = "/profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        System.out.println("Fetching User with id: " + id);
-        User user = userService.findById(id);
-        if (user == null) {
-            System.out.println("User with id " + id + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    @GetMapping(value = "/profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
+//    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+//        System.out.println("Fetching User with id: " + id);
+//        User user = userService.findById(id);
+//        if (user == null) {
+//            System.out.println("User with id " + id + " not found");
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile")
+    public ResponseEntity<User> getCurrentUser() {
+        User user = userDetailsService.getCurrentUser();
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
 //    @PostMapping(value = "/user/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody
@@ -78,35 +93,62 @@ public class UserRestController {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
-    @PutMapping(value = "/profile/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        User originUser = userService.findById(id);
+//    @PutMapping(value = "/profile/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
+//    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+//        User originUser = userService.findById(id);
+//
+//        if (originUser == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        originUser.setName(user.getName());
+//        originUser.setPhone(user.getPhone());
+//        originUser.setAddress(user.getAddress());
+//        originUser.setAvatar(user.getAvatar());
+//
+//        userService.saveUser(originUser);
+//        return new ResponseEntity<>(originUser, HttpStatus.OK);
+//    }
 
-        if (originUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/profile/edit")
+    public ResponseEntity<User> updateProfile(@RequestBody User user) {
+        User originUser = userDetailsService.getCurrentUser();
+        if (user != null) {
+            originUser.setName(user.getName());
+            originUser.setPhone(user.getPhone());
+            originUser.setAddress(user.getAddress());
+            originUser.setAvatar(user.getAvatar());
 
-        originUser.setName(user.getName());
-        originUser.setPhone(user.getPhone());
-        originUser.setAddress(user.getAddress());
-        originUser.setAvatar(user.getAvatar());
-
-        userService.saveUser(originUser);
-        return new ResponseEntity<>(originUser, HttpStatus.OK);
+            userService.saveUser(originUser);
+            return new ResponseEntity<>(originUser, HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/profile/editPassword/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
-    public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
-        User originUser = userService.findById(id);
-        if (originUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//    @PutMapping(value = "/profile/editPassword/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
+//    public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
+//        User originUser = userService.findById(id);
+//        if (originUser == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        originUser.setPassword(encoder.encode(user.getPassword()));
+//
+//        userService.saveUser(originUser);
+//        return new ResponseEntity<>(originUser, HttpStatus.OK);
+//    }
 
-        originUser.setPassword(encoder.encode(user.getPassword()));
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/profile/editPassword")
+    public ResponseEntity<User> updatePassword(@RequestBody User user) {
+        User originUser = userDetailsService.getCurrentUser();
+        if (user != null) {
+            originUser.setPassword(encoder.encode(user.getPassword()));
 
-        userService.saveUser(originUser);
-        return new ResponseEntity<>(originUser, HttpStatus.OK);
+            userService.saveUser(originUser);
+            return new ResponseEntity<>(originUser, HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

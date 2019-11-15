@@ -3,6 +3,7 @@ package com.codegym.lastproject.security.service;
 import com.codegym.lastproject.model.User;
 import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,5 +23,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + username);
         }
         return UserPrinciple.build(user);
+    }
+
+    public User getCurrentUser() {
+        User user;
+        String email;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        if (userService.existsByEmail(email)) {
+            user = userService.findByEmail(email);
+        } else {
+            user = new User();
+            user.setEmail("Anonymous");
+        }
+        return user;
     }
 }
