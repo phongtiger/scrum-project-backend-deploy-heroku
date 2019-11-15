@@ -34,6 +34,8 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                 String username = tokenProvider.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                System.out.println(username);
+                System.out.println(jwt);
                 UsernamePasswordAuthenticationToken authentication
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -48,6 +50,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     }
 
     private String getJwt(HttpServletRequest request) {
+        System.out.println("aaaaaa");
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

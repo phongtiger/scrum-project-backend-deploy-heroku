@@ -87,7 +87,7 @@ public class AuthRestAPIs {
                     roles.add(adminRole);
                     break;
 
-                case "pm":
+                case "host":
                     Role hostRole = roleService.findByName(RoleName.ROLE_HOST);
                     if (hostRole == null) {
                         throw new UsernameNotFoundException("Fail! -> Cause: User Role not find.");
