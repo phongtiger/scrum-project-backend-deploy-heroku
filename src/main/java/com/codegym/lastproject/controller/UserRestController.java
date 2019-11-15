@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,9 @@ public class UserRestController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @ModelAttribute("role")
     public List<Role> allRole() {
@@ -37,7 +41,7 @@ public class UserRestController {
 //        return new ResponseEntity<>(users, HttpStatus.OK);
 //    }
 
-    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('HOST')")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         System.out.println("Fetching User with id: " + id);
@@ -100,7 +104,7 @@ public class UserRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        originUser.setPassword(user.getPassword());
+        originUser.setPassword(encoder.encode(user.getPassword()));
 
         userService.saveUser(originUser);
         return new ResponseEntity<>(originUser, HttpStatus.OK);
