@@ -9,4 +9,6 @@ public interface RoleService {
     List<Role> findAll();
 
     Role findByName(RoleName roleName);
+
+    void save(Role role);
 }
