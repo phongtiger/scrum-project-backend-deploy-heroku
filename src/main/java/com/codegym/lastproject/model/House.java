@@ -28,7 +28,6 @@ public class House {
     private Long area;
     private Long price;
 
-    @OneToMany(targetEntity = HouseImage.class)
     private List<String> imageUrls;
 
     @OneToMany(targetEntity = OrderHouse.class)
