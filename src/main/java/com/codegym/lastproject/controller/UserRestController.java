@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin("*")
 @Controller
@@ -150,5 +151,14 @@ public class UserRestController {
             userService.saveUser(originUser);
             return new ResponseEntity<>(originUser, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile/role")
+    public ResponseEntity<Role> getRole() {
+        User originUser = userDetailsService.getCurrentUser();
+        Role role = originUser.getRole().iterator().next();
+        System.out.println(role);
+        return new ResponseEntity<>(role, HttpStatus.OK);
     }
 }
