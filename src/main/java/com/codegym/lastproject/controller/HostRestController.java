@@ -4,7 +4,6 @@ import com.codegym.lastproject.model.*;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.CategoryService;
 import com.codegym.lastproject.service.HouseService;
-import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,9 +19,6 @@ import java.util.List;
 public class HostRestController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private HouseService houseService;
