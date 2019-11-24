@@ -1,10 +1,7 @@
 package com.codegym.lastproject.controller;
 
 import com.codegym.lastproject.model.House;
-import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
-import com.codegym.lastproject.service.CategoryService;
 import com.codegym.lastproject.service.HouseService;
-import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
