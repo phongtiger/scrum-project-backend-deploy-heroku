@@ -9,6 +9,7 @@ import com.codegym.lastproject.service.HouseService;
 import com.codegym.lastproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,21 +32,19 @@ public class HostRestController {
     @Autowired
     private CategoryService categoryService;
 
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
-    @GetMapping("/")
-    public ResponseEntity<List<House>> getListHouse() {
-        Long hostId = userDetailsService.getCurrentUser().getId();
-        List<House> houses = houseService.findByHostId(hostId);
-        if (houses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(houses, HttpStatus.OK);
-    }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createHouse")
     public ResponseEntity<House> createHouse(@RequestBody House house) {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/editHouse")
+    public ResponseEntity<House> editHouse(@RequestBody House house) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
