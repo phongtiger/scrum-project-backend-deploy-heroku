@@ -61,15 +61,25 @@ public class HostRestController {
     public ResponseEntity<House> editHouse(@PathVariable("id") Long id, @RequestBody House house) {
         User originUser = userDetailsService.getCurrentUser();
         List<House> houses = houseService.findByHostId(originUser.getId());
+        for (House house1: houses) {
+            System.out.println(house1.getId());
+        }
         House originHouse = houseService.findById(id);
         boolean isHost = houses.contains(originHouse);
+        System.out.println(isHost);
         if (originHouse == null || !isHost) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        house.setId(id);
-        houseService.save(house);
-        return new ResponseEntity<>(HttpStatus.OK);
+        originHouse.setAddress(house.getAddress());
+        originHouse.setArea(house.getArea());
+        originHouse.setBathroomNumber(house.getBathroomNumber());
+        originHouse.setBedroomNumber(house.getBedroomNumber());
+        originHouse.setHouseName(house.getHouseName());
+        originHouse.setPrice(house.getPrice());
+
+        houseService.save(originHouse);
+        return new ResponseEntity<>(originHouse, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
