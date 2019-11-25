@@ -28,7 +28,7 @@ public class House {
     private Long area;
     private Long price;
 
-    private List<String> imageUrls;
+    private String imageUrls;
 
     @OneToMany(targetEntity = OrderHouse.class)
     @JsonManagedReference
@@ -40,7 +40,7 @@ public class House {
     public House() {
     }
 
-    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, List<String> imageUrls, List<OrderHouse> orderHouses, Status status) {
+    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, String imageUrls, List<OrderHouse> orderHouses, Status status) {
         this.houseName = houseName;
         this.user = user;
         this.category = category;
@@ -126,11 +126,11 @@ public class House {
         this.price = price;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 

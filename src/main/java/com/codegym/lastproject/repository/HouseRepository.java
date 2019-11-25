@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface HouseRepository extends JpaRepository<House, Long> {
-    List<House> findByHostId (Long hostId);
+    List<House> findByUserId (Long hostId);
 }

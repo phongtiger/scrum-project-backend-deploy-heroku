@@ -20,7 +20,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public List<House> findByHostId(Long hostId) {
-        return houseRepository.findByHostId(hostId);
+        return houseRepository.findByUserId(hostId);
     }
 
     @Override
