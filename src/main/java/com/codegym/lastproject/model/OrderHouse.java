@@ -1,6 +1,7 @@
 package com.codegym.lastproject.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,27 +22,24 @@ public class OrderHouse {
     @JoinColumn(name = "tenant_id")
     private User tenant;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date checkin;
-    private Date checkout;
-    private Long numberGuest;
-    private Long cost;
-    private Date orderDate;
 
-    @Enumerated(EnumType.STRING)
-    private StatusOrder statusOrder;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date checkout;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date orderDate;
 
     public OrderHouse() {
     }
 
-    public OrderHouse(House house, User tenant, Date checkin, Date checkout, Long numberGuest, Long cost, Date orderDate, StatusOrder statusOrder) {
+    public OrderHouse(House house, User tenant, Date checkin, Date checkout, Date orderDate) {
         this.house = house;
         this.tenant = tenant;
         this.checkin = checkin;
         this.checkout = checkout;
-        this.numberGuest = numberGuest;
-        this.cost = cost;
         this.orderDate = orderDate;
-        this.statusOrder = statusOrder;
     }
 
     public Long getId() {
@@ -84,35 +82,11 @@ public class OrderHouse {
         this.checkout = checkout;
     }
 
-    public Long getNumberGuest() {
-        return numberGuest;
-    }
-
-    public void setNumberGuest(Long numberGuest) {
-        this.numberGuest = numberGuest;
-    }
-
-    public Long getCost() {
-        return cost;
-    }
-
-    public void setCost(Long cost) {
-        this.cost = cost;
-    }
-
     public Date getOrderDate() {
         return orderDate;
     }
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public StatusOrder getStatusOrder() {
-        return statusOrder;
-    }
-
-    public void setStatusOrder(StatusOrder statusOrder) {
-        this.statusOrder = statusOrder;
     }
 }

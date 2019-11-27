@@ -34,13 +34,10 @@ public class House {
     @JsonManagedReference
     private List<OrderHouse> orderHouses;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
     public House() {
     }
 
-    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, String imageUrls, List<OrderHouse> orderHouses, Status status) {
+    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, String imageUrls, List<OrderHouse> orderHouses) {
         this.houseName = houseName;
         this.user = user;
         this.category = category;
@@ -51,7 +48,6 @@ public class House {
         this.price = price;
         this.imageUrls = imageUrls;
         this.orderHouses = orderHouses;
-        this.status = status;
     }
 
     public Long getId() {
@@ -140,13 +136,5 @@ public class House {
 
     public void setOrderHouses(List<OrderHouse> orderHouses) {
         this.orderHouses = orderHouses;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }
