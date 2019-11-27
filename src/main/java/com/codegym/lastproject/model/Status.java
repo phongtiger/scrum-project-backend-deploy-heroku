@@ -15,13 +15,13 @@ public class Status {
     @Enumerated(EnumType.STRING)
     @NaturalId
     @Column(length = 60)
-    private StatusHouse statusHouse;
+    private StatusHouse status;
 
     public Status() {
     }
 
-    public Status(StatusHouse statusHouse) {
-        this.statusHouse = statusHouse;
+    public Status(StatusHouse status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -32,11 +32,11 @@ public class Status {
         this.id = id;
     }
 
-    public StatusHouse getStatusHouse() {
-        return statusHouse;
+    public StatusHouse getStatus() {
+        return status;
     }
 
-    public void setStatusHouse(StatusHouse statusHouse) {
-        this.statusHouse = statusHouse;
+    public void setStatus(StatusHouse status) {
+        this.status = status;
     }
 }

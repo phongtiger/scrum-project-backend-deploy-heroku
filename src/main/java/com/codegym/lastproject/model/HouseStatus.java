@@ -24,7 +24,7 @@ public class HouseStatus {
     private Date endDate;
 
     @ManyToOne
-    @JoinTable(name = "status_id")
+    @JoinColumn(name = "status_id")
     private Status status;
 
     public HouseStatus() {
