@@ -1,6 +1,6 @@
 package com.codegym.lastproject.model;
 
-import com.codegym.lastproject.model.util.StatusOrder;
+import com.codegym.lastproject.model.util.StatusHouse;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,17 +23,18 @@ public class HouseStatus {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date endDate;
 
-    @Enumerated(EnumType.STRING)
-    private StatusOrder statusOrder;
+    @ManyToOne
+    @JoinTable(name = "status_id")
+    private Status status;
 
     public HouseStatus() {
     }
 
-    public HouseStatus(House house, Date beginDate, Date endDate, StatusOrder statusOrder) {
+    public HouseStatus(House house, Date beginDate, Date endDate, Status status) {
         this.house = house;
         this.beginDate = beginDate;
         this.endDate = endDate;
-        this.statusOrder = statusOrder;
+        this.status = status;
     }
 
     public Long getId() {
@@ -68,11 +69,11 @@ public class HouseStatus {
         this.endDate = endDate;
     }
 
-    public StatusOrder getStatusOrder() {
-        return statusOrder;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setStatusOrder(StatusOrder statusOrder) {
-        this.statusOrder = statusOrder;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
