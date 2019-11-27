@@ -59,10 +59,9 @@ public class AuthRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("Fail -> Email is already in use!",
-                    HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
@@ -100,6 +99,6 @@ public class AuthRestController {
         user.setRole(roles);
         userService.saveUser(user);
 
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
