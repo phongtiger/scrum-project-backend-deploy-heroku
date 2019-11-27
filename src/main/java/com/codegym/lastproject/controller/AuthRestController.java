@@ -4,7 +4,7 @@ import com.codegym.lastproject.message.request.LoginForm;
 import com.codegym.lastproject.message.request.SignUpForm;
 import com.codegym.lastproject.message.response.JwtResponse;
 import com.codegym.lastproject.model.Role;
-import com.codegym.lastproject.model.RoleName;
+import com.codegym.lastproject.model.util.RoleName;
 import com.codegym.lastproject.model.User;
 import com.codegym.lastproject.security.jwt.JwtProvider;
 import com.codegym.lastproject.service.RoleService;

@@ -1,7 +1,7 @@
 package com.codegym.lastproject.service.impl;
 
 import com.codegym.lastproject.model.Role;
-import com.codegym.lastproject.model.RoleName;
+import com.codegym.lastproject.model.util.RoleName;
 import com.codegym.lastproject.repository.RoleRepository;
 import com.codegym.lastproject.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;

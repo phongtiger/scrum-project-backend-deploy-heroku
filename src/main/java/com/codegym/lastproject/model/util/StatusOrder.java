@@ -1,4 +1,4 @@
-package com.codegym.lastproject.model;
+package com.codegym.lastproject.model.util;
 
 public enum StatusOrder {
     DONE,

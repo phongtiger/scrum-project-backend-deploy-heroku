@@ -1,5 +1,6 @@
 package com.codegym.lastproject.model;
 
+import com.codegym.lastproject.model.util.RoleName;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;

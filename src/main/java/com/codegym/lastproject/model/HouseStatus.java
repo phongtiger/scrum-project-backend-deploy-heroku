@@ -1,5 +1,6 @@
 package com.codegym.lastproject.model;
 
+import com.codegym.lastproject.model.util.StatusOrder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

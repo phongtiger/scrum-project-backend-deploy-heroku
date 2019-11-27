@@ -1,6 +1,6 @@
 package com.codegym.lastproject.repository;
 
-import com.codegym.lastproject.model.RoleName;
+import com.codegym.lastproject.model.util.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.codegym.lastproject.model.Role;
 import org.springframework.stereotype.Repository;
