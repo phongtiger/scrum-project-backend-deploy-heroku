@@ -1,5 +1,6 @@
 package com.codegym.lastproject.model;
 
+import com.codegym.lastproject.model.util.CategoryName;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -11,13 +12,15 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @NaturalId
-    private String name;
+    @Column(length = 60)
+    private CategoryName name;
 
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(CategoryName name) {
         this.name = name;
     }
 
@@ -29,11 +32,11 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
+    public CategoryName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(CategoryName name) {
         this.name = name;
     }
 }

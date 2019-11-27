@@ -1,6 +1,7 @@
 package com.codegym.lastproject.service.impl;
 
 import com.codegym.lastproject.model.Category;
+import com.codegym.lastproject.model.util.CategoryName;
 import com.codegym.lastproject.repository.CategoryRepository;
 import com.codegym.lastproject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
-    }
-
-    @Override
-    public Category findByName(String name) {
+    public Category findByName(CategoryName name) {
         return categoryRepository.findByName(name);
     }
 

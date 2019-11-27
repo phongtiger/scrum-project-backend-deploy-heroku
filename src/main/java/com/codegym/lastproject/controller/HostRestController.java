@@ -1,6 +1,7 @@
 package com.codegym.lastproject.controller;
 
 import com.codegym.lastproject.model.*;
+import com.codegym.lastproject.model.util.CategoryName;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.CategoryService;
 import com.codegym.lastproject.service.HouseService;
@@ -34,7 +35,7 @@ public class HostRestController {
         originHouse.setUser(originUser);
 
         if (house.getCategory() != null) {
-            String category = house.getCategory().getName();
+            CategoryName category = house.getCategory().getName();
             Category originCategory = categoryService.findByName(category);
             originHouse.setCategory(originCategory);
         }
