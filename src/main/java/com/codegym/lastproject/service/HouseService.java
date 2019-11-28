@@ -14,4 +14,6 @@ public interface HouseService {
     void save(House house);
 
     void deleteHouse(Long id);
+
+    Long findMaxHouseId();
 }

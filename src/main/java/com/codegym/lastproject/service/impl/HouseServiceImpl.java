@@ -37,4 +37,9 @@ public class HouseServiceImpl implements HouseService {
     public void deleteHouse(Long id) {
         houseRepository.deleteById(id);
     }
+
+    @Override
+    public Long findMaxHouseId() {
+        return houseRepository.findMaxHouseId();
+    }
 }

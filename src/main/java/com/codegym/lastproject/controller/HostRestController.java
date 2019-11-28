@@ -2,9 +2,12 @@ package com.codegym.lastproject.controller;
 
 import com.codegym.lastproject.model.*;
 import com.codegym.lastproject.model.util.CategoryName;
+import com.codegym.lastproject.model.util.StatusHouse;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.CategoryService;
 import com.codegym.lastproject.service.HouseService;
+import com.codegym.lastproject.service.HouseStatusService;
+import com.codegym.lastproject.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.Period;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -26,6 +31,12 @@ public class HostRestController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private HouseStatusService houseStatusService;
+
+    @Autowired
+    private StatusService statusService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createHouse")
@@ -53,6 +64,9 @@ public class HostRestController {
         originHouse.setOrderHouses(null);
 
         houseService.save(originHouse);
+
+        setStatus();
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -95,5 +109,25 @@ public class HostRestController {
 
         houseService.deleteHouse(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void setStatus() {
+        HouseStatus houseStatus = new HouseStatus();
+
+        Long id = houseService.findMaxHouseId();
+        House house = houseService.findById(id);
+        System.out.println(house.getId());
+        houseStatus.setHouse(house);
+
+        Date beginDate = new Date(System.currentTimeMillis());
+        houseStatus.setBeginDate(beginDate);
+
+        Date endDate = new Date(System.currentTimeMillis() + 7776000000L);
+        houseStatus.setEndDate(endDate);
+
+        Status status = statusService.findByStatus(StatusHouse.AVAILABLE);
+        houseStatus.setStatus(status);
+
+        houseStatusService.save(houseStatus);
     }
 }
