@@ -68,7 +68,7 @@ public class HouseStatusRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/set", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/set", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> setHouseStatus(@RequestBody HouseStatus houseStatus) {
         Long id = houseStatus.getHouse().getId();
         Date beginDate = houseStatus.getBeginDate();
@@ -87,18 +87,23 @@ public class HouseStatusRestController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        if (houseStatus.getBeginDate() != houseStatus1.getBeginDate()) {
-            HouseStatus houseStatus2 = new HouseStatus(houseStatus.getHouse(), houseStatus1.getBeginDate(), houseStatus.getBeginDate(), statusService.findByStatus(StatusHouse.AVAILABLE));
+        boolean isBeginDayEqual = !houseStatus.getBeginDate().toString().equals(houseStatus1.getBeginDate().toString());
+        System.out.println(isBeginDayEqual);
+        if (isBeginDayEqual) {
+            HouseStatus houseStatus2 = new HouseStatus(houseStatus.getHouse(), houseStatus1.getBeginDate(), new Date(houseStatus.getBeginDate().getTime() - 86400000L), statusService.findByStatus(StatusHouse.AVAILABLE));
             houseStatusService.save(houseStatus2);
-        }
-
-        if (houseStatus.getEndDate() != houseStatus1.getEndDate()) {
-            HouseStatus houseStatus3 = new HouseStatus(houseStatus.getHouse(), houseStatus.getEndDate(), houseStatus1.getEndDate(), statusService.findByStatus(StatusHouse.AVAILABLE));
-            houseStatusService.save(houseStatus3);
         }
 
         HouseStatus originHouseStatus = new HouseStatus(houseStatus.getHouse(), houseStatus.getBeginDate(), houseStatus.getEndDate(), statusService.findByStatus(houseStatus.getStatus().getName()));
         houseStatusService.save(originHouseStatus);
+
+        boolean isEndDayEqual = !houseStatus.getEndDate().toString().equals(houseStatus1.getEndDate().toString());
+        System.out.println(isEndDayEqual);
+        if (isEndDayEqual) {
+            HouseStatus houseStatus3 = new HouseStatus(houseStatus.getHouse(), new Date(houseStatus.getEndDate().getTime() + 86400000L), houseStatus1.getEndDate(), statusService.findByStatus(StatusHouse.AVAILABLE));
+            houseStatusService.save(houseStatus3);
+        }
+
         houseStatusService.deleteById(houseStatus1.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
