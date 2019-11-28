@@ -2,6 +2,7 @@ package com.codegym.lastproject.service;
 
 import com.codegym.lastproject.model.HouseStatus;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface HouseStatusService {
@@ -14,4 +15,6 @@ public interface HouseStatusService {
     void deleteById(Long id);
 
     List<HouseStatus> findAllByHouseId(Long houseId);
+
+    HouseStatus findHouseStatusAvailable(Date beginDate, Date endDate, Long houseId);
 }
