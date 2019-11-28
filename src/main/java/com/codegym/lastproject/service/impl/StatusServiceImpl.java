@@ -14,7 +14,7 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public Status findByStatus(StatusHouse statusHouse) {
-        return statusRepository.findByStatus(statusHouse);
+        return statusRepository.findByName(statusHouse);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.codegym.lastproject.model;
 
-import com.codegym.lastproject.model.util.StatusHouse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,10 +17,10 @@ public class HouseStatus {
     @JoinColumn(name = "house_id")
     private House house;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Date beginDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Date endDate;
 
     @ManyToOne

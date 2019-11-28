@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StatusRepository extends JpaRepository<Status, Long> {
-    Status findByStatus(StatusHouse statusHouse);
+    Status findByName(StatusHouse statusHouse);
 }

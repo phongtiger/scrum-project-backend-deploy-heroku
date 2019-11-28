@@ -1,6 +1,7 @@
 package com.codegym.lastproject.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -22,13 +23,13 @@ public class OrderHouse {
     @JoinColumn(name = "tenant_id")
     private User tenant;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Date checkin;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Date checkout;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Date orderDate;
 
     public OrderHouse() {
