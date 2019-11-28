@@ -4,7 +4,6 @@ import com.codegym.lastproject.model.House;
 import com.codegym.lastproject.model.HouseStatus;
 import com.codegym.lastproject.model.Status;
 import com.codegym.lastproject.model.util.StatusHouse;
-import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.HouseService;
 import com.codegym.lastproject.service.HouseStatusService;
 import com.codegym.lastproject.service.StatusService;
@@ -21,9 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/status")
 public class HouseStatusRestController {
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
     @Autowired
     private StatusService statusService;
 
