@@ -67,6 +67,10 @@ public class OrderRestController {
         Date checkin = orderHouse.getCheckin();
         Date checkout = orderHouse.getCheckout();
 
+        if (checkin.getTime() > checkout.getTime()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
         User originUser = userDetailsService.getCurrentUser();
         originOrderHouse.setTenant(originUser);
 

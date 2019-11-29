@@ -38,37 +38,41 @@ public class HouseStatusRestController {
         return new ResponseEntity<>(houseStatuses, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createHouseStatus(@RequestBody HouseStatus houseStatus) {
-        HouseStatus originHouseStatus = new HouseStatus();
-        if (houseStatus.getHouse() == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            Long id = houseStatus.getHouse().getId();
-            House originHouse = houseService.findById(id);
-            originHouseStatus.setHouse(originHouse);
-        }
-
-        originHouseStatus.setBeginDate(houseStatus.getBeginDate());
-        originHouseStatus.setEndDate(houseStatus.getEndDate());
-
-        if (houseStatus.getStatus() == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            StatusHouse status = houseStatus.getStatus().getName();
-            Status originStatus = statusService.findByStatus(status);
-            originHouseStatus.setStatus(originStatus);
-        }
-
-        houseStatusService.save(originHouseStatus);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> createHouseStatus(@RequestBody HouseStatus houseStatus) {
+//        HouseStatus originHouseStatus = new HouseStatus();
+//        if (houseStatus.getHouse() == null) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } else {
+//            Long id = houseStatus.getHouse().getId();
+//            House originHouse = houseService.findById(id);
+//            originHouseStatus.setHouse(originHouse);
+//        }
+//
+//        originHouseStatus.setBeginDate(houseStatus.getBeginDate());
+//        originHouseStatus.setEndDate(houseStatus.getEndDate());
+//
+//        if (houseStatus.getStatus() == null) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } else {
+//            StatusHouse status = houseStatus.getStatus().getName();
+//            Status originStatus = statusService.findByStatus(status);
+//            originHouseStatus.setStatus(originStatus);
+//        }
+//
+//        houseStatusService.save(originHouseStatus);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @PostMapping(value = "/set", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> setHouseStatus(@RequestBody HouseStatus houseStatus) {
         Long id = houseStatus.getHouse().getId();
         Date beginDate = houseStatus.getBeginDate();
         Date endDate = houseStatus.getEndDate();
+
+        if (beginDate.getTime() > endDate.getTime()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
         HouseStatus houseStatus1 = houseStatusService.findHouseStatusAvailable(beginDate, endDate, id);
 
