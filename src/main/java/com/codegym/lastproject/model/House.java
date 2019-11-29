@@ -1,9 +1,6 @@
 package com.codegym.lastproject.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "house")
@@ -28,16 +25,13 @@ public class House {
     private Long area;
     private Long price;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String imageUrls;
-
-    @OneToMany(targetEntity = OrderHouse.class)
-    @JsonManagedReference
-    private List<OrderHouse> orderHouses;
 
     public House() {
     }
 
-    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, String imageUrls, List<OrderHouse> orderHouses) {
+    public House(String houseName, User user, Category category, String address, Long bedroomNumber, Long bathroomNumber, Long area, Long price, String imageUrls) {
         this.houseName = houseName;
         this.user = user;
         this.category = category;
@@ -47,7 +41,6 @@ public class House {
         this.area = area;
         this.price = price;
         this.imageUrls = imageUrls;
-        this.orderHouses = orderHouses;
     }
 
     public Long getId() {
@@ -128,13 +121,5 @@ public class House {
 
     public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
-    }
-
-    public List<OrderHouse> getOrderHouses() {
-        return orderHouses;
-    }
-
-    public void setOrderHouses(List<OrderHouse> orderHouses) {
-        this.orderHouses = orderHouses;
     }
 }

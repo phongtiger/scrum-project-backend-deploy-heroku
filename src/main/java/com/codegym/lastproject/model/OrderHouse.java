@@ -1,6 +1,5 @@
 package com.codegym.lastproject.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,7 +14,6 @@ public class OrderHouse {
 
     @ManyToOne
     @JoinColumn(name = "house_id")
-    @JsonBackReference
     private House house;
 
     @ManyToOne

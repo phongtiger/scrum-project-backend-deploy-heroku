@@ -60,7 +60,6 @@ public class HostRestController {
         originHouse.setBedroomNumber(house.getBedroomNumber());
         originHouse.setHouseName(house.getHouseName());
         originHouse.setPrice(house.getPrice());
-        originHouse.setOrderHouses(null);
 
         houseService.save(originHouse);
 
