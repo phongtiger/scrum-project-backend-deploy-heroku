@@ -81,6 +81,7 @@ public class OrderRestController {
         House originHouse = houseService.findById(id);
         originOrderHouse.setHouse(originHouse);
 
+        //check xem co trang thai available hay khong
         HouseStatus houseStatus = new HouseStatus(originHouse, checkin, checkout, statusService.findByStatus(StatusHouse.BOOKED));
         HouseStatus houseStatus1 = houseStatusService.findHouseStatusAvailable(checkin, checkout, id);
 
@@ -123,6 +124,48 @@ public class OrderRestController {
         originOrderHouse.setCheckout(checkout);
         originOrderHouse.setOrderDate(orderDate);
         orderHouseService.saveOrder(originOrderHouse);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/delete/{id}")
+    public ResponseEntity<Void> deleteOrderHouse(@PathVariable("id") Long id) {
+        User originUser = userDetailsService.getCurrentUser();
+        OrderHouse orderHouse = orderHouseService.findById(id);
+
+        if (orderHouse.getTenant() != originUser) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Date beginDate = orderHouse.getCheckin();
+        Date endDate = orderHouse.getCheckout();
+        Long houseId = orderHouse.getHouse().getId();
+
+        Date newBeginDate, newEndDate;
+
+        HouseStatus houseStatus1 = houseStatusService.findHouseStatusBooked(beginDate, endDate, houseId);
+        houseStatusService.deleteById(houseStatus1.getId());
+
+        HouseStatus houseStatus2 = houseStatusService.findHouseStatusEnd(new Date(beginDate.getTime() - 86400000L), houseId);
+        if (houseStatus2 != null) {
+            newBeginDate = houseStatus2.getBeginDate();
+            houseStatusService.deleteById(houseStatus2.getId());
+        } else {
+            newBeginDate = beginDate;
+        }
+
+        HouseStatus houseStatus3 = houseStatusService.findHouseStatusBegin(new Date(endDate.getTime() + 86400000L), houseId);
+        if (houseStatus3 != null) {
+            newEndDate = houseStatus3.getEndDate();
+            houseStatusService.deleteById(houseStatus3.getId());
+        } else {
+            newEndDate = endDate;
+        }
+
+        HouseStatus houseStatus = new HouseStatus(orderHouse.getHouse(), newBeginDate, newEndDate, statusService.findByStatus(StatusHouse.AVAILABLE));
+
+        houseStatusService.save(houseStatus);
+        orderHouseService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
