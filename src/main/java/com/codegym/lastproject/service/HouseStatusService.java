@@ -17,4 +17,8 @@ public interface HouseStatusService {
     List<HouseStatus> findAllByHouseId(Long houseId);
 
     HouseStatus findHouseStatusAvailable(Date beginDate, Date endDate, Long houseId);
+
+    HouseStatus findHouseStatusBegin(Date beginDate, Long houseId);
+
+    HouseStatus findHouseStatusEnd(Date endDate, Long houseId);
 }
