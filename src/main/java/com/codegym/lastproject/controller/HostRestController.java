@@ -4,10 +4,7 @@ import com.codegym.lastproject.model.*;
 import com.codegym.lastproject.model.util.CategoryName;
 import com.codegym.lastproject.model.util.StatusHouse;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
-import com.codegym.lastproject.service.CategoryService;
-import com.codegym.lastproject.service.HouseService;
-import com.codegym.lastproject.service.HouseStatusService;
-import com.codegym.lastproject.service.StatusService;
+import com.codegym.lastproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +34,9 @@ public class HostRestController {
     @Autowired
     private StatusService statusService;
 
+    @Autowired
+    private OrderHouseService orderHouseService;
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createHouse")
     public ResponseEntity<House> createHouse(@RequestBody House house) {
@@ -50,9 +50,7 @@ public class HostRestController {
             originHouse.setCategory(originCategory);
         }
 
-        if (house.getImageUrls() != null) {
-            originHouse.setImageUrls(house.getImageUrls());
-        }
+        originHouse.setImageUrls(house.getImageUrls());
 
         originHouse.setAddress(house.getAddress());
         originHouse.setArea(house.getArea());
@@ -72,13 +70,9 @@ public class HostRestController {
     @PutMapping(value = "/editHouse/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<House> editHouse(@PathVariable("id") Long id, @RequestBody House house) {
         User originUser = userDetailsService.getCurrentUser();
-        List<House> houses = houseService.findByHostId(originUser.getId());
-        for (House house1: houses) {
-            System.out.println(house1.getId());
-        }
         House originHouse = houseService.findById(id);
-        boolean isHost = houses.contains(originHouse);
-        System.out.println(isHost);
+
+        boolean isHost = isHost(originUser, originHouse);
         if (originHouse == null || !isHost) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -98,15 +92,40 @@ public class HostRestController {
     @DeleteMapping(value = "/deleteHouse/{id}")
     public ResponseEntity<Void> deleteHouse(@PathVariable("id") Long id) {
         User originUser = userDetailsService.getCurrentUser();
-        List<House> houses = houseService.findByHostId(originUser.getId());
         House house = houseService.findById(id);
-        boolean isHost = houses.contains(house);
+
+        boolean isHost = isHost(originUser, house);
         if (house == null || !isHost) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         houseService.deleteHouse(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/listOrder/{id}")
+    public ResponseEntity<List<OrderHouse>> getListOrder(@PathVariable("id") Long id) {
+        User originUser = userDetailsService.getCurrentUser();
+        House house = houseService.findById(id);
+
+        boolean isHost = isHost(originUser, house);
+        if (house == null || !isHost) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        List<OrderHouse> orderHouseList = orderHouseService.findByHouseId(id);
+        if (orderHouseList == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(orderHouseList, HttpStatus.OK);
+    }
+
+    private boolean isHost(User user, House originHouse) {
+        List<House> houses = houseService.findByHostId(user.getId());
+        boolean isHost = houses.contains(originHouse);
+        return isHost;
     }
 
     private void setStatus() {
