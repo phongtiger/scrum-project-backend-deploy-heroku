@@ -58,4 +58,9 @@ public class HouseStatusServiceImpl implements HouseStatusService {
     public HouseStatus findHouseStatusEnd(Date endDate, Long houseId) {
         return houseStatusRepository.findByEndDateEqualsAndHouseIdAndStatus(endDate, houseId, statusRepository.findByName(StatusHouse.AVAILABLE));
     }
+
+    @Override
+    public HouseStatus findHouseStatusBooked(Date beginDate, Date endDate, Long houseId) {
+        return houseStatusRepository.findByBeginDateEqualsAndEndDateEqualsAndHouseIdAndAndStatus(beginDate, endDate, houseId, statusRepository.findByName(StatusHouse.BOOKED));
+    }
 }
