@@ -29,6 +29,10 @@ public class OrderHouse {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date orderDate;
 
+    @ManyToOne
+    @JoinColumn(name = "order_status_id")
+    private OrderStatus orderStatus;
+
     public OrderHouse() {
     }
 
@@ -38,6 +42,15 @@ public class OrderHouse {
         this.checkin = checkin;
         this.checkout = checkout;
         this.orderDate = orderDate;
+    }
+
+    public OrderHouse(House house, User tenant, Date checkin, Date checkout, Date orderDate, OrderStatus orderStatus) {
+        this.house = house;
+        this.tenant = tenant;
+        this.checkin = checkin;
+        this.checkout = checkout;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
     }
 
     public Long getId() {
@@ -86,5 +99,13 @@ public class OrderHouse {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
