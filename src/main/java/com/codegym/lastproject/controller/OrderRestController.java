@@ -5,11 +5,9 @@ import com.codegym.lastproject.model.HouseStatus;
 import com.codegym.lastproject.model.OrderHouse;
 import com.codegym.lastproject.model.User;
 import com.codegym.lastproject.model.util.StatusHouse;
+import com.codegym.lastproject.model.util.StatusOrder;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
-import com.codegym.lastproject.service.HouseService;
-import com.codegym.lastproject.service.HouseStatusService;
-import com.codegym.lastproject.service.OrderHouseService;
-import com.codegym.lastproject.service.StatusService;
+import com.codegym.lastproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +35,9 @@ public class OrderRestController {
 
     @Autowired
     private HouseService houseService;
+
+    @Autowired
+    private OrderStatusService orderStatusService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping(value = "/")
@@ -123,6 +124,7 @@ public class OrderRestController {
         originOrderHouse.setCheckin(checkin);
         originOrderHouse.setCheckout(checkout);
         originOrderHouse.setOrderDate(orderDate);
+        originOrderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.PROCESSING));
         orderHouseService.saveOrder(originOrderHouse);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -165,7 +167,9 @@ public class OrderRestController {
         HouseStatus houseStatus = new HouseStatus(orderHouse.getHouse(), newBeginDate, newEndDate, statusService.findByStatus(StatusHouse.AVAILABLE));
 
         houseStatusService.save(houseStatus);
-        orderHouseService.deleteOrder(id);
+
+        orderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.CANCELED));
+        orderHouseService.saveOrder(orderHouse);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
