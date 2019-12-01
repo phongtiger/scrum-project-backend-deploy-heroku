@@ -16,4 +16,6 @@ public interface OrderHouseService {
     List<OrderHouse> findByHouseId(Long houseId);
 
     List<OrderHouse> findByTenantId(Long tenantId);
+
+    List<OrderHouse> findProcessingOrderByHouseId(Long houseId);
 }
