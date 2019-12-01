@@ -6,4 +6,5 @@ import com.codegym.lastproject.model.util.StatusHouse;
 public interface StatusService {
     Status findByStatus(StatusHouse statusHouse);
 
-    void save(Status status);}
+    void save(Status status);
+}
