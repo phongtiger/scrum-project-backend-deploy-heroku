@@ -53,7 +53,17 @@ public class OrderRestController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<List<OrderHouse>> getListOrderHouseByHouseId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<OrderHouse>> getListProcessingOrderHouseByHouseId(@PathVariable("id") Long id) {
+        List<OrderHouse> orderHouses = orderHouseService.findProcessingOrderByHouseId(id);
+        if (orderHouses.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(orderHouses, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    @GetMapping(value = "/all/{id}")
+    public ResponseEntity<List<OrderHouse>> getListAllOrderHouseByHouseId(@PathVariable("id") Long id) {
         List<OrderHouse> orderHouses = orderHouseService.findByHouseId(id);
         if (orderHouses.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -67,8 +77,9 @@ public class OrderRestController {
         OrderHouse originOrderHouse = new OrderHouse();
         Date checkin = orderHouse.getCheckin();
         Date checkout = orderHouse.getCheckout();
+        Date orderDate = new Date(System.currentTimeMillis());
 
-        if (checkin.getTime() > checkout.getTime()) {
+        if (checkin.getTime() > checkout.getTime() || checkin.getTime() < orderDate.getTime()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
@@ -118,8 +129,6 @@ public class OrderRestController {
         }
 
         houseStatusService.deleteById(houseStatus1.getId());
-
-        Date orderDate = new Date(System.currentTimeMillis());
 
         originOrderHouse.setCheckin(checkin);
         originOrderHouse.setCheckout(checkout);
