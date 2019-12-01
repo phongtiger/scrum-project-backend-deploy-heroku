@@ -1,12 +1,15 @@
 package com.codegym.lastproject.config;
 
 import com.codegym.lastproject.model.Category;
+import com.codegym.lastproject.model.OrderStatus;
 import com.codegym.lastproject.model.Role;
 import com.codegym.lastproject.model.Status;
 import com.codegym.lastproject.model.util.CategoryName;
 import com.codegym.lastproject.model.util.RoleName;
 import com.codegym.lastproject.model.util.StatusHouse;
+import com.codegym.lastproject.model.util.StatusOrder;
 import com.codegym.lastproject.service.CategoryService;
+import com.codegym.lastproject.service.OrderStatusService;
 import com.codegym.lastproject.service.RoleService;
 import com.codegym.lastproject.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private StatusService statusService;
 
+    @Autowired
+    private OrderStatusService orderStatusService;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         for (RoleName roleName : RoleName.values()) {
@@ -42,6 +48,12 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         for (StatusHouse statusHouse : StatusHouse.values()) {
             if (statusService.findByStatus(statusHouse) == null) {
                 statusService.save(new Status(statusHouse));
+            }
+        }
+
+        for (StatusOrder statusOrder: StatusOrder.values()) {
+            if (orderStatusService.findByStatus(statusOrder)== null) {
+                orderStatusService.save(new OrderStatus(statusOrder));
             }
         }
     }
