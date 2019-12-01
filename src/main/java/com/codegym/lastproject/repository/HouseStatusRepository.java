@@ -12,12 +12,12 @@ import java.util.List;
 public interface HouseStatusRepository extends JpaRepository<HouseStatus, Long> {
     List<HouseStatus> findAllByHouseId (Long houseId);
 
-    HouseStatus findByBeginDateLessThanEqualAndEndDateGreaterThanEqualAndAndHouseIdAndStatus
+    HouseStatus findByBeginDateLessThanEqualAndEndDateGreaterThanEqualAndHouseIdAndStatus
             (Date beginDate, Date endDate, Long houseId, Status status);
 
     HouseStatus findByBeginDateEqualsAndHouseIdAndStatus (Date beginDate, Long houseId, Status status);
 
     HouseStatus findByEndDateEqualsAndHouseIdAndStatus (Date endDate, Long houseId, Status status);
 
-    HouseStatus findByBeginDateEqualsAndEndDateEqualsAndHouseIdAndAndStatus (Date beginDate, Date endDate, Long houseId, Status status);
+    HouseStatus findByBeginDateEqualsAndEndDateEqualsAndHouseIdAndStatus (Date beginDate, Date endDate, Long houseId, Status status);
 }

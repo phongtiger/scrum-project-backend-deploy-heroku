@@ -46,7 +46,7 @@ public class HouseStatusServiceImpl implements HouseStatusService {
 
     @Override
     public HouseStatus findHouseStatusAvailable(Date beginDate, Date endDate, Long houseId) {
-        return houseStatusRepository.findByBeginDateLessThanEqualAndEndDateGreaterThanEqualAndAndHouseIdAndStatus(beginDate, endDate, houseId, statusRepository.findByName(StatusHouse.AVAILABLE));
+        return houseStatusRepository.findByBeginDateLessThanEqualAndEndDateGreaterThanEqualAndHouseIdAndStatus(beginDate, endDate, houseId, statusRepository.findByName(StatusHouse.AVAILABLE));
     }
 
     @Override
@@ -61,6 +61,6 @@ public class HouseStatusServiceImpl implements HouseStatusService {
 
     @Override
     public HouseStatus findHouseStatusBooked(Date beginDate, Date endDate, Long houseId) {
-        return houseStatusRepository.findByBeginDateEqualsAndEndDateEqualsAndHouseIdAndAndStatus(beginDate, endDate, houseId, statusRepository.findByName(StatusHouse.BOOKED));
+        return houseStatusRepository.findByBeginDateEqualsAndEndDateEqualsAndHouseIdAndStatus(beginDate, endDate, houseId, statusRepository.findByName(StatusHouse.BOOKED));
     }
 }
