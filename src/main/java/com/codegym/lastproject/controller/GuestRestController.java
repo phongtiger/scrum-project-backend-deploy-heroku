@@ -4,7 +4,6 @@ import com.codegym.lastproject.model.House;
 import com.codegym.lastproject.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class GuestRestController {
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/host/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/host/{id}")
     public ResponseEntity<List<House>> getHostListHouse(@PathVariable("id") Long id) {
         List<House> houses = houseService.findByHostId(id);
         if (houses.isEmpty()) {
@@ -35,7 +34,7 @@ public class GuestRestController {
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<House> getHouse(@PathVariable("id") Long id) {
         House house = houseService.findById(id);
         if (house == null) {

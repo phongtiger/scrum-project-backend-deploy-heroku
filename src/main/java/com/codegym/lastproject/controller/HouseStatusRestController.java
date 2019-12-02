@@ -9,7 +9,6 @@ import com.codegym.lastproject.service.HouseStatusService;
 import com.codegym.lastproject.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public class HouseStatusRestController {
     @Autowired
     private HouseService houseService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<List<HouseStatus>> getListHouse(@PathVariable("id") Long id) {
         List<HouseStatus> houseStatuses = houseStatusService.findAllByHouseId(id);
         if (houseStatuses.isEmpty()) {
@@ -64,7 +63,7 @@ public class HouseStatusRestController {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
-    @PostMapping(value = "/set", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/set")
     public ResponseEntity<Void> setHouseStatus(@RequestBody HouseStatus houseStatus) {
         Long id = houseStatus.getHouse().getId();
         Date beginDate = houseStatus.getBeginDate();
