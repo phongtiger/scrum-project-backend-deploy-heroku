@@ -75,7 +75,7 @@ public class HostRestController {
         User originUser = userDetailsService.getCurrentUser();
         House originHouse = houseService.findById(id);
 
-        boolean isHost = isHost(originUser, originHouse);
+        boolean isHost = houseService.isHost(originUser, originHouse);
         if (originHouse == null || !isHost) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -97,7 +97,7 @@ public class HostRestController {
         User originUser = userDetailsService.getCurrentUser();
         House house = houseService.findById(id);
 
-        boolean isHost = isHost(originUser, house);
+        boolean isHost = houseService.isHost(originUser, house);
         if (house == null || !isHost) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -114,7 +114,7 @@ public class HostRestController {
 
         List<OrderHouse> orderHouseList = orderHouseService.findByHouseId(id);
 
-        boolean isHost = isHost(originUser, house);
+        boolean isHost = houseService.isHost(originUser, house);
         if (house == null || !isHost || orderHouseList == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -158,14 +158,8 @@ public class HostRestController {
         boolean isProcessing = (statusOrder == StatusOrder.PROCESSING);
         House house = houseService.findById(orderHouse.getHouse().getId());
 
-        boolean isHost = isHost(originUser, house);
+        boolean isHost = houseService.isHost(originUser, house);
         return orderHouse == null || house == null || !isHost || !isProcessing;
-    }
-
-    private boolean isHost(User user, House originHouse) {
-        List<House> houses = houseService.findByHostId(user.getId());
-        boolean isHost = houses.contains(originHouse);
-        return isHost;
     }
 
     private void setStatus() {

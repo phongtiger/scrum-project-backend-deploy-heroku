@@ -1,6 +1,7 @@
 package com.codegym.lastproject.service;
 
 import com.codegym.lastproject.model.House;
+import com.codegym.lastproject.model.User;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface HouseService {
     void deleteHouse(Long id);
 
     Long findMaxHouseId();
+
+    boolean isHost(User user, House house);
 }
