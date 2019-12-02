@@ -126,7 +126,7 @@ public class HostRestController {
     @PutMapping(value = "/done/{id}")
     public ResponseEntity<Void> setDoneOrder(@PathVariable("id") Long id) {
         OrderHouse orderHouse = orderHouseService.findById(id);
-        boolean isConformity = isConformity(orderHouse);
+        boolean isConformity = houseService.isConformity(orderHouse);
         if (isConformity) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -141,7 +141,7 @@ public class HostRestController {
     @PutMapping(value = "/canceled/{id}")
     public ResponseEntity<Void> setCanceledOrder(@PathVariable("id") Long id) {
         OrderHouse orderHouse = orderHouseService.findById(id);
-        boolean isConformity = isConformity(orderHouse);
+        boolean isConformity = houseService.isConformity(orderHouse);
         if (isConformity) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -150,16 +150,6 @@ public class HostRestController {
         orderHouseService.saveOrder(orderHouse);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private boolean isConformity(OrderHouse orderHouse) {
-        User originUser = userDetailsService.getCurrentUser();
-        StatusOrder statusOrder = orderHouse.getOrderStatus().getName();
-        boolean isProcessing = (statusOrder == StatusOrder.PROCESSING);
-        House house = houseService.findById(orderHouse.getHouse().getId());
-
-        boolean isHost = houseService.isHost(originUser, house);
-        return orderHouse == null || house == null || !isHost || !isProcessing;
     }
 
     private void setStatus() {

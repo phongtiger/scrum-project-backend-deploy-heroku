@@ -1,6 +1,7 @@
 package com.codegym.lastproject.service;
 
 import com.codegym.lastproject.model.House;
+import com.codegym.lastproject.model.OrderHouse;
 import com.codegym.lastproject.model.User;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface HouseService {
     Long findMaxHouseId();
 
     boolean isHost(User user, House house);
+
+    boolean isConformity(OrderHouse orderHouse);
 }
