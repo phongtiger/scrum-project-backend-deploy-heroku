@@ -33,7 +33,7 @@ public class HouseStatusRestController {
     public ResponseEntity<List<HouseStatus>> getListHouse(@PathVariable("id") Long id) {
         List<HouseStatus> houseStatuses = houseStatusService.findAllByHouseId(id);
         if (houseStatuses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(houseStatuses, HttpStatus.OK);
     }
@@ -71,13 +71,13 @@ public class HouseStatusRestController {
         Date endDate = houseStatus.getEndDate();
 
         if (beginDate.getTime() > endDate.getTime()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         HouseStatus houseStatus1 = houseStatusService.findHouseStatusAvailable(beginDate, endDate, id);
 
         if (houseStatus1 == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
         Date beginDate1 = houseStatus1.getBeginDate();

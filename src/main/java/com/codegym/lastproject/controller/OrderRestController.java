@@ -46,7 +46,7 @@ public class OrderRestController {
 
         List<OrderHouse> orderHouses = orderHouseService.findByTenantId(originUser.getId());
         if (orderHouses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(orderHouses, HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class OrderRestController {
     public ResponseEntity<List<OrderHouse>> getListProcessingOrderHouseByHouseId(@PathVariable("id") Long id) {
         List<OrderHouse> orderHouses = orderHouseService.findProcessingOrderByHouseId(id);
         if (orderHouses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(orderHouses, HttpStatus.OK);
     }
@@ -66,7 +66,7 @@ public class OrderRestController {
     public ResponseEntity<List<OrderHouse>> getListAllOrderHouseByHouseId(@PathVariable("id") Long id) {
         List<OrderHouse> orderHouses = orderHouseService.findByHouseId(id);
         if (orderHouses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(orderHouses, HttpStatus.OK);
     }
@@ -80,14 +80,14 @@ public class OrderRestController {
         Date orderDate = new Date(System.currentTimeMillis());
 
         if (checkin.getTime() > checkout.getTime() || checkin.getTime() < orderDate.getTime()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         User originUser = userDetailsService.getCurrentUser();
         originOrderHouse.setTenant(originUser);
 
         if (orderHouse.getHouse() == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Long id = orderHouse.getHouse().getId();
         House originHouse = houseService.findById(id);
@@ -98,7 +98,7 @@ public class OrderRestController {
         HouseStatus houseStatus1 = houseStatusService.findHouseStatusAvailable(checkin, checkout, id);
 
         if (houseStatus1 == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Date beginDate1 = houseStatus1.getBeginDate();
@@ -145,7 +145,7 @@ public class OrderRestController {
         OrderHouse orderHouse = orderHouseService.findById(id);
 
         if (orderHouse.getTenant() != originUser) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Date beginDate = orderHouse.getCheckin();

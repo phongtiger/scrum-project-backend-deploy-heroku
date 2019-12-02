@@ -78,7 +78,7 @@ public class HostRestController {
 
         boolean isHost = isHost(originUser, originHouse);
         if (originHouse == null || !isHost) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         originHouse.setAddress(house.getAddress());
@@ -100,7 +100,7 @@ public class HostRestController {
 
         boolean isHost = isHost(originUser, house);
         if (house == null || !isHost) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         houseService.deleteHouse(id);
@@ -113,14 +113,11 @@ public class HostRestController {
         User originUser = userDetailsService.getCurrentUser();
         House house = houseService.findById(id);
 
-        boolean isHost = isHost(originUser, house);
-        if (house == null || !isHost) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
         List<OrderHouse> orderHouseList = orderHouseService.findByHouseId(id);
-        if (orderHouseList == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        boolean isHost = isHost(originUser, house);
+        if (house == null || !isHost || orderHouseList == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(orderHouseList, HttpStatus.OK);
@@ -135,7 +132,7 @@ public class HostRestController {
 
         boolean isHost = isHost(originUser, house);
         if (orderHouse == null || house == null || !isHost) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         orderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.DONE));

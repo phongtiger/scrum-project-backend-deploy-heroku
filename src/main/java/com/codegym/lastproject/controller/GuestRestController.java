@@ -21,7 +21,7 @@ public class GuestRestController {
     public ResponseEntity<List<House>> getListHouse() {
         List<House> houses = houseService.findAll();
         if (houses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
@@ -30,7 +30,7 @@ public class GuestRestController {
     public ResponseEntity<List<House>> getHostListHouse(@PathVariable("id") Long id) {
         List<House> houses = houseService.findByHostId(id);
         if (houses.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
@@ -39,7 +39,7 @@ public class GuestRestController {
     public ResponseEntity<House> getHouse(@PathVariable("id") Long id) {
         House house = houseService.findById(id);
         if (house == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(house, HttpStatus.OK);
     }
