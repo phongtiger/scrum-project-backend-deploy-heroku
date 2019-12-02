@@ -131,19 +131,4 @@ public class HostRestController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PreAuthorize("isAuthenticated()")
-    @PutMapping(value = "/canceled/{id}")
-    public ResponseEntity<Void> setCanceledOrder(@PathVariable("id") Long id) {
-        OrderHouse orderHouse = orderHouseService.findById(id);
-        boolean isConformity = houseService.isConformity(orderHouse);
-        if (isConformity) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        orderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.CANCELED));
-        orderHouseService.saveOrder(orderHouse);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

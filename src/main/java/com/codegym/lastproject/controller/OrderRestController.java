@@ -1,9 +1,7 @@
 package com.codegym.lastproject.controller;
 
-import com.codegym.lastproject.model.House;
-import com.codegym.lastproject.model.HouseStatus;
-import com.codegym.lastproject.model.OrderHouse;
-import com.codegym.lastproject.model.User;
+import com.codegym.lastproject.model.*;
+import com.codegym.lastproject.model.util.RoleName;
 import com.codegym.lastproject.model.util.StatusHouse;
 import com.codegym.lastproject.model.util.StatusOrder;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
@@ -144,8 +142,17 @@ public class OrderRestController {
         User originUser = userDetailsService.getCurrentUser();
         OrderHouse orderHouse = orderHouseService.findById(id);
 
-        if (orderHouse.getTenant() != originUser) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Role role = originUser.getRole().iterator().next();
+
+        if (role.getName() == RoleName.ROLE_USER) {
+            if (orderHouse.getTenant() != originUser) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            boolean isConformity = houseService.isConformity(orderHouse);
+            if (isConformity) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
 
         Date beginDate = orderHouse.getCheckin();
