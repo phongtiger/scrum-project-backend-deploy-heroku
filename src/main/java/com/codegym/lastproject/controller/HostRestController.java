@@ -128,10 +128,12 @@ public class HostRestController {
     public ResponseEntity<Void> setDoneOrder(@PathVariable("id") Long id) {
         User originUser = userDetailsService.getCurrentUser();
         OrderHouse orderHouse = orderHouseService.findById(id);
+        StatusOrder statusOrder = orderHouse.getOrderStatus().getName();
+        boolean isProcessing = (statusOrder == StatusOrder.PROCESSING);
         House house = houseService.findById(orderHouse.getHouse().getId());
 
         boolean isHost = isHost(originUser, house);
-        if (orderHouse == null || house == null || !isHost) {
+        if (orderHouse == null || house == null || !isHost || !isProcessing) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
