@@ -3,6 +3,7 @@ package com.codegym.lastproject.controller;
 import com.codegym.lastproject.model.*;
 import com.codegym.lastproject.model.util.CategoryName;
 import com.codegym.lastproject.model.util.StatusHouse;
+import com.codegym.lastproject.model.util.StatusOrder;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class HostRestController {
 
     @Autowired
     private OrderHouseService orderHouseService;
+
+    @Autowired
+    private OrderStatusService orderStatusService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createHouse")
@@ -120,6 +124,24 @@ public class HostRestController {
         }
 
         return new ResponseEntity<>(orderHouseList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping(value = "/house/{id}")
+    public ResponseEntity<Void> setDoneOrder(@PathVariable("id") Long id) {
+        User originUser = userDetailsService.getCurrentUser();
+        OrderHouse orderHouse = orderHouseService.findById(id);
+        House house = houseService.findById(orderHouse.getHouse().getId());
+
+        boolean isHost = isHost(originUser, house);
+        if (orderHouse == null || house == null || !isHost) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        orderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.DONE));
+        orderHouseService.saveOrder(orderHouse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private boolean isHost(User user, House originHouse) {
