@@ -4,7 +4,6 @@ import com.codegym.lastproject.model.House;
 import com.codegym.lastproject.model.HouseStatus;
 import com.codegym.lastproject.model.Status;
 import com.codegym.lastproject.model.util.StatusHouse;
-import com.codegym.lastproject.service.HouseService;
 import com.codegym.lastproject.service.HouseStatusService;
 import com.codegym.lastproject.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,6 @@ public class HouseStatusRestController {
 
     @Autowired
     private HouseStatusService houseStatusService;
-
-    @Autowired
-    private HouseService houseService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<List<HouseStatus>> getListHouse(@PathVariable("id") Long id) {
@@ -60,8 +56,7 @@ public class HouseStatusRestController {
         Date beginDate1 = houseStatus1.getBeginDate();
         Date endDate1 = houseStatus1.getEndDate();
 
-        if ((beginDate == beginDate1)
-                && (endDate == endDate1)) {
+        if ((beginDate == beginDate1) && (endDate == endDate1)) {
             houseStatus1.setStatus(status);
             houseStatusService.save(houseStatus1);
             return new ResponseEntity<>(HttpStatus.OK);

@@ -123,16 +123,11 @@ public class HostRestController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping(value = "/house/{id}")
+    @PutMapping(value = "/done/{id}")
     public ResponseEntity<Void> setDoneOrder(@PathVariable("id") Long id) {
-        User originUser = userDetailsService.getCurrentUser();
         OrderHouse orderHouse = orderHouseService.findById(id);
-        StatusOrder statusOrder = orderHouse.getOrderStatus().getName();
-        boolean isProcessing = (statusOrder == StatusOrder.PROCESSING);
-        House house = houseService.findById(orderHouse.getHouse().getId());
-
-        boolean isHost = isHost(originUser, house);
-        if (orderHouse == null || house == null || !isHost || !isProcessing) {
+        boolean isConformity = isConformity(orderHouse);
+        if (isConformity) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -140,6 +135,31 @@ public class HostRestController {
         orderHouseService.saveOrder(orderHouse);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping(value = "/canceled/{id}")
+    public ResponseEntity<Void> setCanceledOrder(@PathVariable("id") Long id) {
+        OrderHouse orderHouse = orderHouseService.findById(id);
+        boolean isConformity = isConformity(orderHouse);
+        if (isConformity) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        orderHouse.setOrderStatus(orderStatusService.findByStatus(StatusOrder.CANCELED));
+        orderHouseService.saveOrder(orderHouse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean isConformity(OrderHouse orderHouse) {
+        User originUser = userDetailsService.getCurrentUser();
+        StatusOrder statusOrder = orderHouse.getOrderStatus().getName();
+        boolean isProcessing = (statusOrder == StatusOrder.PROCESSING);
+        House house = houseService.findById(orderHouse.getHouse().getId());
+
+        boolean isHost = isHost(originUser, house);
+        return orderHouse == null || house == null || !isHost || !isProcessing;
     }
 
     private boolean isHost(User user, House originHouse) {
