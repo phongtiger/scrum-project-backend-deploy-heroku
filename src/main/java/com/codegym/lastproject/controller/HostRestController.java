@@ -2,7 +2,6 @@ package com.codegym.lastproject.controller;
 
 import com.codegym.lastproject.model.*;
 import com.codegym.lastproject.model.util.CategoryName;
-import com.codegym.lastproject.model.util.StatusHouse;
 import com.codegym.lastproject.model.util.StatusOrder;
 import com.codegym.lastproject.security.service.UserDetailsServiceImpl;
 import com.codegym.lastproject.service.*;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -30,9 +28,6 @@ public class HostRestController {
 
     @Autowired
     private HouseStatusService houseStatusService;
-
-    @Autowired
-    private StatusService statusService;
 
     @Autowired
     private OrderHouseService orderHouseService;
@@ -64,7 +59,7 @@ public class HostRestController {
 
         houseService.save(originHouse);
 
-        setStatus();
+        houseStatusService.setStatusNewHouse();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -150,25 +145,5 @@ public class HostRestController {
         orderHouseService.saveOrder(orderHouse);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private void setStatus() {
-        HouseStatus houseStatus = new HouseStatus();
-
-        Long id = houseService.findMaxHouseId();
-        House house = houseService.findById(id);
-        System.out.println(house.getId());
-        houseStatus.setHouse(house);
-
-        Date beginDate = new Date(System.currentTimeMillis());
-        houseStatus.setBeginDate(beginDate);
-
-        Date endDate = new Date(System.currentTimeMillis() + 7776000000L);
-        houseStatus.setEndDate(endDate);
-
-        Status status = statusService.findByStatus(StatusHouse.AVAILABLE);
-        houseStatus.setStatus(status);
-
-        houseStatusService.save(houseStatus);
     }
 }

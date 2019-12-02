@@ -23,4 +23,6 @@ public interface HouseStatusService {
     HouseStatus findHouseStatusEnd(Date endDate, Long houseId);
 
     HouseStatus findHouseStatusBooked(Date beginDate, Date endDate, Long houseId);
+
+    void setStatusNewHouse();
 }
