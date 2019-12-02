@@ -37,37 +37,15 @@ public class HouseStatusRestController {
         return new ResponseEntity<>(houseStatuses, HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Void> createHouseStatus(@RequestBody HouseStatus houseStatus) {
-//        HouseStatus originHouseStatus = new HouseStatus();
-//        if (houseStatus.getHouse() == null) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } else {
-//            Long id = houseStatus.getHouse().getId();
-//            House originHouse = houseService.findById(id);
-//            originHouseStatus.setHouse(originHouse);
-//        }
-//
-//        originHouseStatus.setBeginDate(houseStatus.getBeginDate());
-//        originHouseStatus.setEndDate(houseStatus.getEndDate());
-//
-//        if (houseStatus.getStatus() == null) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } else {
-//            StatusHouse status = houseStatus.getStatus().getName();
-//            Status originStatus = statusService.findByStatus(status);
-//            originHouseStatus.setStatus(originStatus);
-//        }
-//
-//        houseStatusService.save(originHouseStatus);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @PostMapping(value = "/set")
     public ResponseEntity<Void> setHouseStatus(@RequestBody HouseStatus houseStatus) {
         Long id = houseStatus.getHouse().getId();
         Date beginDate = houseStatus.getBeginDate();
         Date endDate = houseStatus.getEndDate();
+        House house = houseStatus.getHouse();
+
+        Status status = statusService.findByStatus(houseStatus.getStatus().getName());
+        Status availableStatus = statusService.findByStatus(StatusHouse.AVAILABLE);
 
         if (beginDate.getTime() > endDate.getTime()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -84,25 +62,23 @@ public class HouseStatusRestController {
 
         if ((beginDate == beginDate1)
                 && (endDate == endDate1)) {
-            houseStatus1.setStatus(statusService.findByStatus(houseStatus.getStatus().getName()));
+            houseStatus1.setStatus(status);
             houseStatusService.save(houseStatus1);
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
         boolean isBeginDayEqual = !beginDate.toString().equals(beginDate1.toString());
-        System.out.println(isBeginDayEqual);
         if (isBeginDayEqual) {
-            HouseStatus houseStatus2 = new HouseStatus(houseStatus.getHouse(), beginDate1, new Date(beginDate.getTime() - 86400000L), statusService.findByStatus(StatusHouse.AVAILABLE));
+            HouseStatus houseStatus2 = new HouseStatus(house, beginDate1, new Date(beginDate.getTime() - 86400000L), availableStatus);
             houseStatusService.save(houseStatus2);
         }
 
-        HouseStatus originHouseStatus = new HouseStatus(houseStatus.getHouse(), beginDate, endDate, statusService.findByStatus(houseStatus.getStatus().getName()));
+        HouseStatus originHouseStatus = new HouseStatus(house, beginDate, endDate, status);
         houseStatusService.save(originHouseStatus);
 
         boolean isEndDayEqual = !endDate.toString().equals(endDate1.toString());
-        System.out.println(isEndDayEqual);
         if (isEndDayEqual) {
-            HouseStatus houseStatus3 = new HouseStatus(houseStatus.getHouse(), new Date(endDate.getTime() + 86400000L), endDate1, statusService.findByStatus(StatusHouse.AVAILABLE));
+            HouseStatus houseStatus3 = new HouseStatus(house, new Date(endDate.getTime() + 86400000L), endDate1, availableStatus);
             houseStatusService.save(houseStatus3);
         }
 
